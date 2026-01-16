@@ -14,6 +14,7 @@ export interface Student {
 }
 
 // Import student photos
+import amareshPhoto from '@/assets/students/amaresh.jpg';
 import debaPhoto from '@/assets/students/deba.jpg';
 import aryaPhoto from '@/assets/students/arya.jpg';
 import ommPhoto from '@/assets/students/omm.jpg';
@@ -50,7 +51,7 @@ export const students: Student[] = [
   { id: 12, name: "Dibyajyoti Patra", rollNo: "UNITM21012", isCR: true, photo: dibyaPhoto, bio: "Born leader who united 30 hearts as one family" },
   
   // Other students
-  { id: 1, name: "Amaresh Sundaray", rollNo: "UNITM21001", isTopper: true, bio: "The brilliant mind who topped with flying colors" },
+  { id: 1, name: "Amaresh Sundaray", rollNo: "UNITM21001", isTopper: true, photo: amareshPhoto, bio: "The brilliant mind who topped with flying colors" },
   { id: 2, name: "Aryabrata Panda", rollNo: "UNITM21002", photo: aryaPhoto, bio: "The stylish trendsetter with a charming personality" },
   { id: 3, name: "Ashutosh Swain", rollNo: "UNITM21003", photo: ashutoshPhoto, bio: "Cool guy with perfect style and sunglasses swag" },
   { id: 4, name: "Ayasakanta Behera", rollNo: "UNITM21004", photo: ayaskantaPhoto, bio: "Beach vibes and colorful personality" },

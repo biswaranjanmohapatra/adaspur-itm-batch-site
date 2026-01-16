@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Heart, GraduationCap, Code } from 'lucide-react';
+import { GraduationCap, Code } from 'lucide-react';
 
 export default function Footer() {
   return (
@@ -33,9 +33,7 @@ export default function Footer() {
 
           {/* Creator Credit */}
           <div className="flex items-center justify-center gap-2 text-sm text-primary-foreground/70">
-            <span>Made with</span>
-            <Heart className="w-4 h-4 text-secondary" fill="currentColor" />
-            <span>by</span>
+            <span>Created By</span>
             <span className="font-semibold text-secondary flex items-center gap-1">
               <Code className="w-4 h-4" />
               Biswa Ranjan Mohapatra
