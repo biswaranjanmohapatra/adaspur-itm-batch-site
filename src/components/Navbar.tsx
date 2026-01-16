@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, GraduationCap } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
+import logoImage from '@/assets/logo.jpg';
 
 const navLinks = [
   { name: 'Home', href: '#home' },
@@ -35,11 +36,15 @@ export default function Navbar() {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
-          <a href="#home" className="flex items-center gap-2">
-            <GraduationCap className={`w-8 h-8 ${isScrolled ? 'text-primary' : 'text-primary-foreground'}`} />
+          <a href="#home" className="flex items-center gap-3">
+            <img 
+              src={logoImage} 
+              alt="B.Sc ITM Logo" 
+              className="w-12 h-12 rounded-full object-cover border-2 border-secondary shadow-lg"
+            />
             <div className={`font-serif font-bold text-lg ${isScrolled ? 'text-primary' : 'text-primary-foreground'}`}>
-              <span className="hidden sm:inline">Udyanath College</span>
-              <span className="sm:hidden">UAC</span>
+              <span className="hidden sm:inline">B.Sc ITM</span>
+              <span className="sm:hidden">ITM</span>
             </div>
           </a>
 

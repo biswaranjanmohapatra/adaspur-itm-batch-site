@@ -1,14 +1,15 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { User, Star, Code, Crown, Sparkles, X, Heart, Users, Award } from 'lucide-react';
+import { User, Code, Crown, Sparkles, X, Heart, Users, Award, Terminal } from 'lucide-react';
 import type { Student } from '@/data/students';
 
 interface StudentCardProps {
   student: Student;
   index: number;
+  featured?: boolean;
 }
 
-export default function StudentCard({ student, index }: StudentCardProps) {
+export default function StudentCard({ student, index, featured }: StudentCardProps) {
   const [isFlipped, setIsFlipped] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -18,6 +19,7 @@ export default function StudentCard({ student, index }: StudentCardProps) {
     if (student.isExCR) return 'border-orange-500 shadow-lg shadow-orange-500/20';
     if (student.isGR) return 'border-purple-500 shadow-lg shadow-purple-500/20';
     if (student.isTopper) return 'border-emerald-500 shadow-lg shadow-emerald-500/20';
+    if (student.isCoder) return 'border-cyan-500 shadow-lg shadow-cyan-500/20';
     if (student.isBeautiful) return 'border-pink-500 shadow-lg shadow-pink-500/20';
     return 'border-border hover:border-primary/50';
   };
@@ -28,6 +30,7 @@ export default function StudentCard({ student, index }: StudentCardProps) {
     if (student.isExCR) return 'bg-gradient-to-br from-orange-500/20 to-orange-400/20';
     if (student.isGR) return 'bg-gradient-to-br from-purple-500/20 to-purple-400/20';
     if (student.isTopper) return 'bg-gradient-to-br from-emerald-500/20 to-emerald-400/20';
+    if (student.isCoder) return 'bg-gradient-to-br from-cyan-500/20 to-cyan-400/20';
     if (student.isBeautiful) return 'bg-gradient-to-br from-pink-500/20 to-rose-400/20';
     return 'bg-gradient-to-br from-primary/10 to-primary/20';
   };
@@ -89,6 +92,17 @@ export default function StudentCard({ student, index }: StudentCardProps) {
           <span>Topper</span>
         </motion.div>
       )}
+      {student.isCoder && (
+        <motion.div
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ type: "spring", delay: 0.5 }}
+          className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-2 py-1 rounded-full text-xs font-semibold flex items-center gap-1 shadow-lg"
+        >
+          <Terminal className="w-3 h-3" />
+          <span>Coder</span>
+        </motion.div>
+      )}
       {student.isBeautiful && (
         <motion.div
           initial={{ scale: 0 }}
@@ -111,7 +125,7 @@ export default function StudentCard({ student, index }: StudentCardProps) {
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true, margin: "-50px" }}
         transition={{ duration: 0.4, delay: (index % 10) * 0.05 }}
-        className="perspective-1000 aspect-square"
+        className={`perspective-1000 aspect-square ${featured ? 'ring-4 ring-blue-500/30 rounded-xl' : ''}`}
         onMouseEnter={() => setIsFlipped(true)}
         onMouseLeave={() => setIsFlipped(false)}
         onClick={() => setIsModalOpen(true)}
@@ -143,6 +157,7 @@ export default function StudentCard({ student, index }: StudentCardProps) {
                     student.isCR ? 'text-blue-500' : 
                     student.isExCR ? 'text-orange-500' :
                     student.isGR ? 'text-purple-500' :
+                    student.isCoder ? 'text-cyan-500' :
                     student.isBeautiful ? 'text-pink-500' : 
                     'text-primary/50'
                   }`} />
@@ -151,8 +166,8 @@ export default function StudentCard({ student, index }: StudentCardProps) {
             </div>
 
             {/* Name bar at bottom */}
-            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-black/0 p-3">
-              <h3 className="font-semibold text-white text-xs truncate text-center">
+            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent p-3">
+              <h3 className="font-semibold text-white text-sm truncate text-center">
                 {student.name}
               </h3>
             </div>
@@ -160,7 +175,7 @@ export default function StudentCard({ student, index }: StudentCardProps) {
 
           {/* Back Side */}
           <div
-            className={`absolute inset-0 rounded-xl overflow-hidden bg-gradient-to-br from-primary to-navy-dark border-2 flex flex-col items-center justify-center p-4 ${getBorderClass()}`}
+            className={`absolute inset-0 rounded-xl overflow-hidden bg-gradient-to-br from-primary via-navy-dark to-primary border-2 flex flex-col items-center justify-center p-4 ${getBorderClass()}`}
             style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
           >
             <div className="text-center">
@@ -258,6 +273,12 @@ export default function StudentCard({ student, index }: StudentCardProps) {
                     <span className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-2 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
                       <Award className="w-3 h-3" />
                       <span>Topper</span>
+                    </span>
+                  )}
+                  {student.isCoder && (
+                    <span className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-2 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
+                      <Terminal className="w-3 h-3" />
+                      <span>Coder</span>
                     </span>
                   )}
                   {student.isBeautiful && (
