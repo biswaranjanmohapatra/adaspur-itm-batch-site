@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { User, Code, Crown, Sparkles, X, Heart, Users, Award, Terminal } from 'lucide-react';
+import { User, Crown, Sparkles, X, Users, Award, Terminal, Star } from 'lucide-react';
 import type { Student } from '@/data/students';
 
 interface StudentCardProps {
@@ -40,12 +40,13 @@ export default function StudentCard({ student, index, featured }: StudentCardPro
       {student.isCreator && (
         <motion.div
           initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ type: "spring", delay: 0.5 }}
-          className="badge-creator flex items-center gap-1"
+          animate={{ scale: 1, boxShadow: ["0 0 20px #ffd700", "0 0 40px #ffd700", "0 0 20px #ffd700"] }}
+          transition={{ type: "spring", delay: 0.5, boxShadow: { duration: 2, repeat: Infinity } }}
+          className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-black px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 shadow-xl border-2 border-yellow-300"
         >
-          <Code className="w-3 h-3" />
-          <span>Creator</span>
+          <Star className="w-4 h-4" fill="currentColor" />
+          <span className="uppercase tracking-wide">Creator</span>
+          <Sparkles className="w-3 h-3" />
         </motion.div>
       )}
       {student.isCR && (
@@ -148,6 +149,8 @@ export default function StudentCard({ student, index, featured }: StudentCardPro
                 <img 
                   src={student.photo} 
                   alt={student.name}
+                  loading="eager"
+                  decoding="async"
                   className="w-full h-full object-cover"
                 />
               ) : (
@@ -193,7 +196,7 @@ export default function StudentCard({ student, index, featured }: StudentCardPro
               )}
               
               <div className="mt-4 flex items-center justify-center gap-1 text-secondary/80">
-                <Heart className="w-3 h-3" fill="currentColor" />
+                <Star className="w-3 h-3" fill="currentColor" />
                 <span className="text-xs">ITM 2021-2024</span>
               </div>
             </div>
@@ -231,6 +234,8 @@ export default function StudentCard({ student, index, featured }: StudentCardPro
                   <img 
                     src={student.photo} 
                     alt={student.name}
+                    loading="eager"
+                    decoding="async"
                     className="w-full h-full object-cover"
                   />
                 ) : (
@@ -246,10 +251,15 @@ export default function StudentCard({ student, index, featured }: StudentCardPro
                     {student.name}
                   </h3>
                   {student.isCreator && (
-                    <span className="badge-creator flex items-center gap-1">
-                      <Code className="w-3 h-3" />
-                      <span>Creator</span>
-                    </span>
+                    <motion.span 
+                      animate={{ boxShadow: ["0 0 10px #ffd700", "0 0 20px #ffd700", "0 0 10px #ffd700"] }}
+                      transition={{ duration: 2, repeat: Infinity }}
+                      className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-black px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 border-2 border-yellow-300"
+                    >
+                      <Star className="w-3 h-3" fill="currentColor" />
+                      <span className="uppercase tracking-wide">Creator</span>
+                      <Sparkles className="w-3 h-3" />
+                    </motion.span>
                   )}
                   {student.isCR && (
                     <span className="bg-blue-500 text-white px-2 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
