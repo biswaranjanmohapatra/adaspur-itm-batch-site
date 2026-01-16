@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Camera, PartyPopper, GraduationCap, Building, Heart, Quote } from 'lucide-react';
+import { Camera, PartyPopper, GraduationCap, Building, Heart, Quote, Calendar, ImageOff, Sparkles } from 'lucide-react';
 
 // Import images
 import picnic1 from '@/assets/memories/picnic-1.jpg';
@@ -32,6 +32,13 @@ interface GalleryImage {
   quote?: string;
 }
 
+interface BatchMemory {
+  id: string;
+  years: string;
+  images: GalleryImage[];
+  isActive?: boolean;
+}
+
 const friendshipQuotes = [
   "Together we laughed, together we grew",
   "Friends who became family",
@@ -42,7 +49,8 @@ const friendshipQuotes = [
   "Some connections are eternal",
 ];
 
-const galleryImages: GalleryImage[] = [
+// 2021-2024 Batch memories
+const batch2021_2024_images: GalleryImage[] = [
   { src: picnic1, alt: 'Picnic group photo', category: 'picnic', quote: 'Adventures await with friends by your side' },
   { src: picnic2, alt: 'Bus tour group', category: 'picnic', quote: 'Every journey is better together' },
   { src: picnic3, alt: 'Class picnic', category: 'picnic', quote: 'Making memories under the sun' },
@@ -64,6 +72,40 @@ const galleryImages: GalleryImage[] = [
   { src: college6, alt: 'ITM batch together', category: 'college', quote: 'Proud to be ITM 2021-2024' },
 ];
 
+// All batch memories
+const batchMemories: BatchMemory[] = [
+  {
+    id: "2021-2024",
+    years: "2021-2024",
+    images: batch2021_2024_images,
+    isActive: false,
+  },
+  {
+    id: "2022-2025",
+    years: "2022-2025",
+    images: [],
+    isActive: false,
+  },
+  {
+    id: "2023-2026",
+    years: "2023-2026",
+    images: [],
+    isActive: true,
+  },
+  {
+    id: "2024-2027",
+    years: "2024-2027",
+    images: [],
+    isActive: true,
+  },
+  {
+    id: "2025-2028",
+    years: "2025-2028",
+    images: [],
+    isActive: true,
+  },
+];
+
 const tabs: { id: GalleryTab; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
   { id: 'picnic', label: 'Picnic Memories', icon: PartyPopper },
   { id: 'farewell', label: 'Farewell', icon: GraduationCap },
@@ -71,10 +113,12 @@ const tabs: { id: GalleryTab; label: string; icon: React.ComponentType<{ classNa
 ];
 
 export default function MemoriesSection() {
+  const [activeBatch, setActiveBatch] = useState("2021-2024");
   const [activeTab, setActiveTab] = useState<GalleryTab>('picnic');
   const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null);
 
-  const filteredImages = galleryImages.filter(img => img.category === activeTab);
+  const currentBatch = batchMemories.find(b => b.id === activeBatch);
+  const filteredImages = currentBatch?.images.filter(img => img.category === activeTab) || [];
 
   return (
     <section id="memories" className="py-20 md:py-28 bg-background relative overflow-hidden">
@@ -101,101 +145,176 @@ export default function MemoriesSection() {
           </p>
         </motion.div>
 
-        {/* Tabs */}
+        {/* Batch Tabs */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="flex flex-wrap justify-center gap-3 mb-12"
+          className="flex flex-wrap justify-center gap-2 md:gap-3 mb-8"
         >
-          {tabs.map((tab) => {
-            const Icon = tab.icon;
-            return (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`gallery-tab flex items-center gap-2 ${
-                  activeTab === tab.id ? 'gallery-tab-active' : 'gallery-tab-inactive'
-                }`}
-              >
-                <Icon className="w-4 h-4" />
-                <span>{tab.label}</span>
-              </button>
-            );
-          })}
+          {batchMemories.map((batch) => (
+            <motion.button
+              key={batch.id}
+              onClick={() => setActiveBatch(batch.id)}
+              className={`relative px-4 md:px-6 py-2 md:py-3 rounded-full font-medium text-sm md:text-base transition-all duration-300 ${
+                activeBatch === batch.id
+                  ? 'bg-gradient-to-r from-primary to-secondary text-white shadow-lg shadow-primary/25'
+                  : 'bg-white/80 text-foreground hover:bg-white hover:shadow-md border border-secondary/20'
+              }`}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <span className="flex items-center gap-2">
+                <Calendar className="w-4 h-4" />
+                {batch.years}
+              </span>
+              {activeBatch === batch.id && (
+                <motion.div
+                  layoutId="activeBatchMemoryIndicator"
+                  className="absolute inset-0 bg-gradient-to-r from-primary to-secondary rounded-full -z-10"
+                  transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                />
+              )}
+            </motion.button>
+          ))}
         </motion.div>
 
-        {/* Gallery Grid */}
+        {/* Batch Content */}
         <AnimatePresence mode="wait">
           <motion.div
-            key={activeTab}
+            key={activeBatch}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.4 }}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
           >
-            {filteredImages.map((image, index) => (
+            {currentBatch && currentBatch.images.length > 0 ? (
+              <>
+                {/* Category Tabs */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.1 }}
+                  className="flex flex-wrap justify-center gap-3 mb-12"
+                >
+                  {tabs.map((tab) => {
+                    const Icon = tab.icon;
+                    const tabImageCount = currentBatch.images.filter(img => img.category === tab.id).length;
+                    return (
+                      <button
+                        key={tab.id}
+                        onClick={() => setActiveTab(tab.id)}
+                        className={`gallery-tab flex items-center gap-2 ${
+                          activeTab === tab.id ? 'gallery-tab-active' : 'gallery-tab-inactive'
+                        }`}
+                      >
+                        <Icon className="w-4 h-4" />
+                        <span>{tab.label}</span>
+                        <span className="text-xs opacity-70">({tabImageCount})</span>
+                      </button>
+                    );
+                  })}
+                </motion.div>
+
+                {/* Gallery Grid */}
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeTab}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.4 }}
+                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+                  >
+                    {filteredImages.map((image, index) => (
+                      <motion.div
+                        key={image.src}
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.4, delay: index * 0.1 }}
+                        className="group relative aspect-[4/3] rounded-xl overflow-hidden cursor-pointer"
+                        onClick={() => setSelectedImage(image)}
+                      >
+                        <img
+                          src={image.src}
+                          alt={image.alt}
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                        <div className="absolute bottom-4 left-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                          <p className="text-primary-foreground font-medium text-sm italic">"{image.quote}"</p>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </motion.div>
+                </AnimatePresence>
+
+                {/* Friendship Quote Section */}
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.3 }}
+                  className="mt-16 text-center"
+                >
+                  <div className="max-w-3xl mx-auto bg-gradient-to-br from-primary/5 to-secondary/10 rounded-2xl p-8 border border-secondary/20">
+                    <Quote className="w-10 h-10 text-secondary mx-auto mb-4" />
+                    <p className="font-serif text-2xl md:text-3xl text-foreground italic leading-relaxed">
+                      "Friendship isn't about who you've known the longest, it's about who walked into your life and said 'I'm here for you' and proved it."
+                    </p>
+                    <div className="mt-6 flex items-center justify-center gap-2 text-secondary">
+                      <Heart className="w-4 h-4" fill="currentColor" />
+                      <span className="text-sm font-medium">ITM Batch {currentBatch.years}</span>
+                      <Heart className="w-4 h-4" fill="currentColor" />
+                    </div>
+                  </div>
+                </motion.div>
+
+                {/* Scrolling quotes */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="mt-12 overflow-hidden"
+                >
+                  <div className="flex gap-8 animate-marquee">
+                    {[...friendshipQuotes, ...friendshipQuotes].map((quote, index) => (
+                      <div key={index} className="flex items-center gap-3 whitespace-nowrap text-muted-foreground">
+                        <Heart className="w-3 h-3 text-secondary/50" fill="currentColor" />
+                        <span className="text-sm italic">{quote}</span>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              </>
+            ) : (
+              /* Empty State for Future Batches */
               <motion.div
-                key={image.src}
-                initial={{ opacity: 0, scale: 0.9 }}
+                initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.4, delay: index * 0.1 }}
-                className="group relative aspect-[4/3] rounded-xl overflow-hidden cursor-pointer"
-                onClick={() => setSelectedImage(image)}
+                transition={{ duration: 0.5 }}
+                className="text-center py-16"
               >
-                <img
-                  src={image.src}
-                  alt={image.alt}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <div className="absolute bottom-4 left-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <p className="text-primary-foreground font-medium text-sm italic">"{image.quote}"</p>
+                <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 mb-6">
+                  <ImageOff className="w-12 h-12 text-primary" />
+                </div>
+                <h3 className="text-2xl font-serif font-bold text-foreground mb-3">
+                  Batch {currentBatch?.years} Memories
+                </h3>
+                <p className="text-muted-foreground max-w-md mx-auto mb-6">
+                  {currentBatch?.isActive 
+                    ? "This batch is currently making memories! Photos will be added soon."
+                    : "Memories for this batch will be added soon. Stay tuned!"}
+                </p>
+                <div className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500/20 to-orange-500/20 rounded-full px-4 py-2 border border-amber-500/30">
+                  <Sparkles className="w-4 h-4 text-amber-600" />
+                  <span className="text-amber-700 text-sm font-medium">
+                    {currentBatch?.isActive ? "Creating Memories" : "Coming Soon"}
+                  </span>
                 </div>
               </motion.div>
-            ))}
+            )}
           </motion.div>
         </AnimatePresence>
-
-        {/* Friendship Quote Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="mt-16 text-center"
-        >
-          <div className="max-w-3xl mx-auto bg-gradient-to-br from-primary/5 to-secondary/10 rounded-2xl p-8 border border-secondary/20">
-            <Quote className="w-10 h-10 text-secondary mx-auto mb-4" />
-            <p className="font-serif text-2xl md:text-3xl text-foreground italic leading-relaxed">
-              "Friendship isn't about who you've known the longest, it's about who walked into your life and said 'I'm here for you' and proved it."
-            </p>
-            <div className="mt-6 flex items-center justify-center gap-2 text-secondary">
-              <Heart className="w-4 h-4" fill="currentColor" />
-              <span className="text-sm font-medium">ITM Batch 2021-2024</span>
-              <Heart className="w-4 h-4" fill="currentColor" />
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Scrolling quotes */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="mt-12 overflow-hidden"
-        >
-          <div className="flex gap-8 animate-marquee">
-            {[...friendshipQuotes, ...friendshipQuotes].map((quote, index) => (
-              <div key={index} className="flex items-center gap-3 whitespace-nowrap text-muted-foreground">
-                <Heart className="w-3 h-3 text-secondary/50" fill="currentColor" />
-                <span className="text-sm italic">{quote}</span>
-              </div>
-            ))}
-          </div>
-        </motion.div>
       </div>
 
       {/* Lightbox */}
