@@ -13,6 +13,14 @@ export interface Student {
   bio?: string;
 }
 
+export interface Batch {
+  id: string;
+  name: string;
+  years: string;
+  students: Student[];
+  isActive?: boolean;
+}
+
 // Import student photos
 import amareshPhoto from '@/assets/students/amaresh.jpg';
 import debaPhoto from '@/assets/students/deba.jpg';
@@ -45,8 +53,8 @@ import ashutoshPhoto from '@/assets/students/ashutosh.jpg';
 import niladriPhoto from '@/assets/students/niladri.jpg';
 import khusbuPhoto from '@/assets/students/khusbu.jpg';
 
-
-export const students: Student[] = [
+// 2021-2024 Batch Students
+const batch2021_2024: Student[] = [
   // CR First - Featured in single row
   { id: 12, name: "Dibyajyoti Patra", rollNo: "UNITM21012", isCR: true, photo: dibyaPhoto, bio: "Born leader who united 30 hearts as one family" },
   
@@ -81,6 +89,48 @@ export const students: Student[] = [
   { id: 29, name: "Sunil Kumar Biswal", rollNo: "UNITM21029", photo: sunilPhoto, bio: "Always there when you need him" },
   { id: 30, name: "Suvam Das", rollNo: "UNITM21030", isExCR: true, photo: suvamPhoto, bio: "Former CR who led with dedication" },
 ];
+
+// All batches
+export const batches: Batch[] = [
+  {
+    id: "2021-2024",
+    name: "Batch 2021-2024",
+    years: "2021-2024",
+    students: batch2021_2024,
+    isActive: false,
+  },
+  {
+    id: "2022-2025",
+    name: "Batch 2022-2025",
+    years: "2022-2025",
+    students: [],
+    isActive: false,
+  },
+  {
+    id: "2023-2026",
+    name: "Batch 2023-2026",
+    years: "2023-2026",
+    students: [],
+    isActive: true,
+  },
+  {
+    id: "2024-2027",
+    name: "Batch 2024-2027",
+    years: "2024-2027",
+    students: [],
+    isActive: true,
+  },
+  {
+    id: "2025-2028",
+    name: "Batch 2025-2028",
+    years: "2025-2028",
+    students: [],
+    isActive: true,
+  },
+];
+
+// Legacy export for backward compatibility
+export const students: Student[] = batch2021_2024;
 
 export interface Teacher {
   id: number;
