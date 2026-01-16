@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { User, Star, Code, Crown, Sparkles, X, Heart, Users } from 'lucide-react';
+import { User, Star, Code, Crown, Sparkles, X, Heart, Users, Award } from 'lucide-react';
 import type { Student } from '@/data/students';
 
 interface StudentCardProps {
@@ -17,6 +17,7 @@ export default function StudentCard({ student, index }: StudentCardProps) {
     if (student.isCR) return 'border-blue-500 shadow-lg shadow-blue-500/20';
     if (student.isExCR) return 'border-orange-500 shadow-lg shadow-orange-500/20';
     if (student.isGR) return 'border-purple-500 shadow-lg shadow-purple-500/20';
+    if (student.isTopper) return 'border-emerald-500 shadow-lg shadow-emerald-500/20';
     if (student.isBeautiful) return 'border-pink-500 shadow-lg shadow-pink-500/20';
     return 'border-border hover:border-primary/50';
   };
@@ -26,6 +27,7 @@ export default function StudentCard({ student, index }: StudentCardProps) {
     if (student.isCR) return 'bg-gradient-to-br from-blue-500/20 to-blue-400/20';
     if (student.isExCR) return 'bg-gradient-to-br from-orange-500/20 to-orange-400/20';
     if (student.isGR) return 'bg-gradient-to-br from-purple-500/20 to-purple-400/20';
+    if (student.isTopper) return 'bg-gradient-to-br from-emerald-500/20 to-emerald-400/20';
     if (student.isBeautiful) return 'bg-gradient-to-br from-pink-500/20 to-rose-400/20';
     return 'bg-gradient-to-br from-primary/10 to-primary/20';
   };
@@ -74,6 +76,17 @@ export default function StudentCard({ student, index }: StudentCardProps) {
         >
           <Users className="w-3 h-3" />
           <span>GR</span>
+        </motion.div>
+      )}
+      {student.isTopper && (
+        <motion.div
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ type: "spring", delay: 0.5 }}
+          className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-2 py-1 rounded-full text-xs font-semibold flex items-center gap-1 shadow-lg"
+        >
+          <Award className="w-3 h-3" />
+          <span>Topper</span>
         </motion.div>
       )}
       {student.isBeautiful && (
@@ -239,6 +252,12 @@ export default function StudentCard({ student, index }: StudentCardProps) {
                     <span className="bg-gradient-to-r from-purple-500 to-violet-500 text-white px-2 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
                       <Users className="w-3 h-3" />
                       <span>GR</span>
+                    </span>
+                  )}
+                  {student.isTopper && (
+                    <span className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-2 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
+                      <Award className="w-3 h-3" />
+                      <span>Topper</span>
                     </span>
                   )}
                   {student.isBeautiful && (
