@@ -13,6 +13,11 @@ import farewell2 from '@/assets/memories/farewell-2.jpg';
 import farewell3 from '@/assets/memories/farewell-3.jpg';
 import farewell4 from '@/assets/memories/farewell-4.jpg';
 import college1 from '@/assets/memories/college-1.jpg';
+import college2 from '@/assets/memories/college-2.jpg';
+import college3 from '@/assets/memories/college-3.jpg';
+import college4 from '@/assets/memories/college-4.jpg';
+import college5 from '@/assets/memories/college-5.jpg';
+import college6 from '@/assets/memories/college-6.jpg';
 
 type GalleryTab = 'picnic' | 'farewell' | 'college';
 
@@ -32,7 +37,12 @@ const galleryImages: GalleryImage[] = [
   { src: farewell2, alt: 'Farewell group', category: 'farewell' },
   { src: farewell3, alt: 'Farewell memories', category: 'farewell' },
   { src: farewell4, alt: 'Final goodbye', category: 'farewell' },
-  { src: college1, alt: 'College days', category: 'college' },
+  { src: college1, alt: 'College campus', category: 'college' },
+  { src: college2, alt: 'Friends at college', category: 'college' },
+  { src: college3, alt: 'Class group photo', category: 'college' },
+  { src: college4, alt: 'Batch photo', category: 'college' },
+  { src: college5, alt: 'College memories', category: 'college' },
+  { src: college6, alt: 'ITM batch together', category: 'college' },
 ];
 
 const tabs: { id: GalleryTab; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
