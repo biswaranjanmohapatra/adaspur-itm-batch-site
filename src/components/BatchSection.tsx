@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Camera, PartyPopper, GraduationCap, Building, Heart, Quote, Calendar, 
-  ImageOff, Sparkles, Users, UserPlus 
+  ImageOff, Sparkles, Users, UserPlus, HandHeart, Gift 
 } from 'lucide-react';
 import { batches } from '@/data/students';
 import StudentCard from './StudentCard';
@@ -198,11 +198,11 @@ export default function BatchSection() {
                       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                         {/* CR student first */}
                         {currentBatch.students.filter(s => s.isCR).map((student, index) => (
-                          <StudentCard key={student.id} student={student} index={index} />
+                          <StudentCard key={student.id} student={student} index={index} batchYears={currentBatch.years} />
                         ))}
                         {/* Other students */}
                         {currentBatch.students.filter(s => !s.isCR).map((student, index) => (
-                          <StudentCard key={student.id} student={student} index={index + 1} />
+                          <StudentCard key={student.id} student={student} index={index + 1} batchYears={currentBatch.years} />
                         ))}
                       </div>
                     </>
@@ -212,6 +212,77 @@ export default function BatchSection() {
                       <p className="text-muted-foreground">No students added yet</p>
                     </div>
                   )}
+                </div>
+
+                {/* Events Section */}
+                <div className="bg-gradient-to-br from-cream to-white rounded-2xl border border-secondary/10 p-6">
+                  <div className="flex items-center gap-2 mb-6">
+                    <Gift className="w-5 h-5 text-primary" />
+                    <h4 className="text-xl font-serif font-bold text-foreground">Events</h4>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* Welcome Event */}
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      className="bg-gradient-to-br from-emerald-500/10 to-teal-500/10 rounded-xl p-5 border border-emerald-500/20"
+                    >
+                      <div className="flex items-center gap-3 mb-3">
+                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center">
+                          <HandHeart className="w-6 h-6 text-white" />
+                        </div>
+                        <div>
+                          <h5 className="font-bold text-foreground">Welcome Party</h5>
+                          <p className="text-sm text-muted-foreground">Fresher's Welcome</p>
+                        </div>
+                      </div>
+                      <p className="text-sm text-muted-foreground">
+                        A warm welcome celebration for new students joining the ITM family. 
+                        Cultural performances, games, and bonding activities.
+                      </p>
+                      <div className="mt-3 flex items-center gap-2">
+                        <span className="text-xs bg-emerald-500/20 text-emerald-700 px-2 py-1 rounded-full">
+                          Annual Event
+                        </span>
+                        <span className="text-xs bg-emerald-500/20 text-emerald-700 px-2 py-1 rounded-full">
+                          {currentBatch.years}
+                        </span>
+                      </div>
+                    </motion.div>
+
+                    {/* Farewell Event */}
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.1 }}
+                      className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 rounded-xl p-5 border border-purple-500/20"
+                    >
+                      <div className="flex items-center gap-3 mb-3">
+                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
+                          <GraduationCap className="w-6 h-6 text-white" />
+                        </div>
+                        <div>
+                          <h5 className="font-bold text-foreground">Farewell Ceremony</h5>
+                          <p className="text-sm text-muted-foreground">Goodbye & Best Wishes</p>
+                        </div>
+                      </div>
+                      <p className="text-sm text-muted-foreground">
+                        A heartfelt farewell to graduating seniors with memorable performances, 
+                        awards, and emotional goodbyes.
+                      </p>
+                      <div className="mt-3 flex items-center gap-2">
+                        <span className="text-xs bg-purple-500/20 text-purple-700 px-2 py-1 rounded-full">
+                          Annual Event
+                        </span>
+                        <span className="text-xs bg-purple-500/20 text-purple-700 px-2 py-1 rounded-full">
+                          {currentBatch.years}
+                        </span>
+                      </div>
+                    </motion.div>
+                  </div>
                 </div>
 
                 {/* Memories Section */}
