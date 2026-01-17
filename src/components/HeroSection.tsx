@@ -1,8 +1,11 @@
 import { motion } from 'framer-motion';
 import { GraduationCap, Users, Calendar, MapPin, Sparkles } from 'lucide-react';
 import logoImage from '@/assets/logo.jpg';
+import { batches } from '@/data/students';
 
 export default function HeroSection() {
+  // Calculate total students across all batches
+  const totalStudents = batches.reduce((sum, batch) => sum + batch.students.length, 0);
   return (
     <section id="home" className="relative min-h-screen flex items-center hero-gradient overflow-hidden">
       {/* Decorative Elements */}
@@ -92,7 +95,7 @@ export default function HeroSection() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="text-primary-foreground/70 text-lg max-w-2xl mx-auto mb-12"
           >
-            Celebrating the journey of 30 brilliant minds who embarked on their IT Management adventure together. 
+            Celebrating the journey of {totalStudents} brilliant minds across {batches.length} batches who embarked on their IT Management adventure together. 
             Forever bonded by memories, friendships, and the pursuit of knowledge.
           </motion.p>
 
@@ -104,7 +107,7 @@ export default function HeroSection() {
             className="grid grid-cols-3 gap-4 sm:gap-8 max-w-md mx-auto"
           >
             <div className="text-center p-4 bg-primary-foreground/5 rounded-xl backdrop-blur-sm border border-primary-foreground/10">
-              <div className="text-3xl sm:text-4xl font-bold text-secondary mb-1">30</div>
+              <div className="text-3xl sm:text-4xl font-bold text-secondary mb-1">{totalStudents}</div>
               <div className="text-primary-foreground/60 text-sm">Students</div>
             </div>
             <div className="text-center p-4 bg-primary-foreground/5 rounded-xl backdrop-blur-sm border border-primary-foreground/10">
