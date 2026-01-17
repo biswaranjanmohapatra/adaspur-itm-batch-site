@@ -194,10 +194,15 @@ export default function BatchSection() {
 
                   {currentBatch.students.length > 0 ? (
                     <>
-                      {/* Students Grid - All students in same grid */}
+                      {/* Students Grid - CR first, then others */}
                       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                        {currentBatch.students.map((student, index) => (
+                        {/* CR student first */}
+                        {currentBatch.students.filter(s => s.isCR).map((student, index) => (
                           <StudentCard key={student.id} student={student} index={index} />
+                        ))}
+                        {/* Other students */}
+                        {currentBatch.students.filter(s => !s.isCR).map((student, index) => (
+                          <StudentCard key={student.id} student={student} index={index + 1} />
                         ))}
                       </div>
                     </>
