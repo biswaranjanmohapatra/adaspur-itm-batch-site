@@ -55,10 +55,6 @@ import khusbuPhoto from '@/assets/students/khusbu.jpg';
 
 // 2021-2024 Batch Students
 const batch2021_2024: Student[] = [
-  // CR First - Featured in single row
-  { id: 12, name: "Dibyajyoti Patra", rollNo: "UNITM21012", isCR: true, photo: dibyaPhoto, bio: "Born leader who united 30 hearts as one family" },
-  
-  // Other students
   { id: 1, name: "Amaresh Sundaray", rollNo: "UNITM21001", isTopper: true, photo: amareshPhoto, bio: "The brilliant mind who topped with flying colors" },
   { id: 2, name: "Aryabrata Panda", rollNo: "UNITM21002", photo: aryaPhoto, bio: "The stylish trendsetter with a charming personality" },
   { id: 3, name: "Ashutosh Swain", rollNo: "UNITM21003", photo: ashutoshPhoto, bio: "Cool guy with perfect style and sunglasses swag" },
@@ -70,6 +66,7 @@ const batch2021_2024: Student[] = [
   { id: 9, name: "Biswa Ranjan Mohapatra", rollNo: "UNITM21009", isCreator: true, photo: biswaPhoto, bio: "Tech wizard inspired by Virat Kohli & Cristiano Ronaldo" },
   { id: 10, name: "Deba Pradhan", rollNo: "UNITM21010", photo: debaPhoto, bio: "Creative mind with endless energy" },
   { id: 11, name: "Debaswini Swain", rollNo: "UNITM21011", isBeautiful: true, photo: debaswiniPhoto, bio: "Beauty with Brain - the perfect combination" },
+  { id: 12, name: "Dibyajyoti Patra", rollNo: "UNITM21012", isCR: true, photo: dibyaPhoto, bio: "Born leader who united 30 hearts as one family" },
   { id: 13, name: "Himansu Sekhar Behera", rollNo: "UNITM21013", photo: himansuPhoto, bio: "Cool vibes with sunglasses style" },
   { id: 14, name: "Khusbu Nayak", rollNo: "UNITM21014", photo: khusbuPhoto, bio: "Sweet smile standing at ITM department entrance" },
   { id: 15, name: "Mayuresh Mohapatra", rollNo: "UNITM21015", photo: mayureshPhoto, bio: "The calm and composed gentleman" },
@@ -90,6 +87,28 @@ const batch2021_2024: Student[] = [
   { id: 30, name: "Suvam Das", rollNo: "UNITM21030", isExCR: true, photo: suvamPhoto, bio: "Former CR who led with dedication" },
 ];
 
+// Helper function to generate placeholder students for a batch
+const generatePlaceholderStudents = (batchPrefix: string, count: number = 30): Student[] => {
+  return Array.from({ length: count }, (_, i) => ({
+    id: i + 1,
+    name: "",
+    rollNo: `${batchPrefix}${String(i + 1).padStart(3, '0')}`,
+    bio: ""
+  }));
+};
+
+// 2022-2025 Batch Students (placeholder)
+const batch2022_2025: Student[] = generatePlaceholderStudents("UNITM22");
+
+// 2023-2026 Batch Students (placeholder)
+const batch2023_2026: Student[] = generatePlaceholderStudents("UNITM23");
+
+// 2024-2027 Batch Students (placeholder)
+const batch2024_2027: Student[] = generatePlaceholderStudents("UNITM24");
+
+// 2025-2028 Batch Students (placeholder)
+const batch2025_2028: Student[] = generatePlaceholderStudents("UNITM25");
+
 // All batches
 export const batches: Batch[] = [
   {
@@ -103,28 +122,28 @@ export const batches: Batch[] = [
     id: "2022-2025",
     name: "Batch 2022-2025",
     years: "2022-2025",
-    students: [],
+    students: batch2022_2025,
     isActive: false,
   },
   {
     id: "2023-2026",
     name: "Batch 2023-2026",
     years: "2023-2026",
-    students: [],
+    students: batch2023_2026,
     isActive: true,
   },
   {
     id: "2024-2027",
     name: "Batch 2024-2027",
     years: "2024-2027",
-    students: [],
+    students: batch2024_2027,
     isActive: true,
   },
   {
     id: "2025-2028",
     name: "Batch 2025-2028",
     years: "2025-2028",
-    students: [],
+    students: batch2025_2028,
     isActive: true,
   },
 ];
