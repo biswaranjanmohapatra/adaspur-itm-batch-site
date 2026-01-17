@@ -92,7 +92,7 @@ const generatePlaceholderStudents = (yearPrefix: string, count: number = 30): St
   return Array.from({ length: count }, (_, i) => ({
     id: i + 1,
     name: "",
-    rollNo: `ITM${yearPrefix}${String(i + 1).padStart(3, '0')}`,
+    rollNo: `UNITM${yearPrefix}${String(i + 1).padStart(3, '0')}`,
     bio: ""
   }));
 };

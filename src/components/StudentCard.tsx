@@ -7,9 +7,10 @@ interface StudentCardProps {
   student: Student;
   index: number;
   featured?: boolean;
+  batchYears?: string;
 }
 
-export default function StudentCard({ student, index, featured }: StudentCardProps) {
+export default function StudentCard({ student, index, featured, batchYears = "2021-2024" }: StudentCardProps) {
   const [isFlipped, setIsFlipped] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -197,7 +198,7 @@ export default function StudentCard({ student, index, featured }: StudentCardPro
               
               <div className="mt-4 flex items-center justify-center gap-1 text-secondary/80">
                 <Star className="w-3 h-3" fill="currentColor" />
-                <span className="text-xs">ITM 2021-2024</span>
+                <span className="text-xs">ITM {batchYears}</span>
               </div>
             </div>
           </div>
@@ -301,7 +302,7 @@ export default function StudentCard({ student, index, featured }: StudentCardPro
                 
                 <div className="flex items-center gap-2 mb-3">
                   <span className="badge-roll">{student.rollNo}</span>
-                  <span className="text-muted-foreground text-sm">B.Sc ITM 2021-2024</span>
+                  <span className="text-muted-foreground text-sm">B.Sc ITM {batchYears}</span>
                 </div>
                 
                 {student.bio && (
