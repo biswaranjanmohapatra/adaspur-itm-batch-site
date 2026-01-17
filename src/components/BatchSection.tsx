@@ -66,6 +66,15 @@ const batch2021_2024_images: GalleryImage[] = [
   { src: college6, alt: 'ITM batch together', category: 'college', quote: 'Proud to be ITM 2021-2024' },
 ];
 
+// Batch-specific descriptions for memories
+const batchMemoryDescriptions: Record<string, string> = {
+  "2021-2024": "Memories of picnics, farewells, and college life from the 2021-2024 batch",
+  "2022-2025": "Unique memories from the 2022-2025 batch - coming soon!",
+  "2023-2026": "Fresh memories being created by the 2023-2026 batch",
+  "2024-2027": "New adventures await for the 2024-2027 batch",
+  "2025-2028": "The journey begins for the 2025-2028 batch",
+};
+
 // Map batch memories by ID
 const batchMemoriesMap: Record<string, GalleryImage[]> = {
   "2021-2024": batch2021_2024_images,
@@ -195,8 +204,8 @@ export default function BatchSection() {
                             <span className="text-sm font-medium text-foreground">Class Representative</span>
                             <Crown className="w-4 h-4 text-blue-500" />
                           </div>
-                          <div className="max-w-xs mx-auto">
-                            <StudentCard student={crStudent} index={0} featured />
+                          <div className="max-w-[150px] mx-auto">
+                            <StudentCard student={crStudent} index={0} />
                           </div>
                         </div>
                       )}
@@ -306,7 +315,7 @@ export default function BatchSection() {
                   ) : (
                     <div className="text-center py-8">
                       <ImageOff className="w-10 h-10 text-muted-foreground/50 mx-auto mb-3" />
-                      <p className="text-muted-foreground">No memories added yet</p>
+                      <p className="text-muted-foreground">{batchMemoryDescriptions[activeBatch] || "No memories added yet"}</p>
                     </div>
                   )}
                 </div>
