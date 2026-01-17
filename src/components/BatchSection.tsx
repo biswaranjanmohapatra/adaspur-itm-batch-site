@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Camera, PartyPopper, GraduationCap, Building, Heart, Quote, Calendar, 
-  ImageOff, Sparkles, Users, Crown, UserPlus 
+  ImageOff, Sparkles, Users, UserPlus 
 } from 'lucide-react';
 import { batches } from '@/data/students';
 import StudentCard from './StudentCard';
@@ -96,8 +96,6 @@ export default function BatchSection() {
   const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null);
 
   const currentBatch = batches.find(b => b.id === activeBatch);
-  const crStudent = currentBatch?.students.find(s => s.isCR);
-  const otherStudents = currentBatch?.students.filter(s => !s.isCR) || [];
   const currentMemories = batchMemoriesMap[activeBatch] || [];
   const filteredImages = currentMemories.filter(img => img.category === activeTab);
 
@@ -196,30 +194,9 @@ export default function BatchSection() {
 
                   {currentBatch.students.length > 0 ? (
                     <>
-                      {/* CR Section */}
-                      {crStudent && (
-                        <div className="mb-8">
-                          <div className="flex items-center justify-center gap-2 mb-4">
-                            <Crown className="w-4 h-4 text-blue-500" />
-                            <span className="text-sm font-medium text-foreground">Class Representative</span>
-                            <Crown className="w-4 h-4 text-blue-500" />
-                          </div>
-                          <div className="max-w-[150px] mx-auto">
-                            <StudentCard student={crStudent} index={0} />
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Divider */}
-                      <div className="flex items-center justify-center gap-4 mb-6">
-                        <div className="h-px w-16 bg-gradient-to-r from-transparent to-secondary/50" />
-                        <Sparkles className="w-3 h-3 text-secondary" />
-                        <div className="h-px w-16 bg-gradient-to-l from-transparent to-secondary/50" />
-                      </div>
-
-                      {/* Other Students Grid */}
+                      {/* Students Grid - All students in same grid */}
                       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                        {otherStudents.map((student, index) => (
+                        {currentBatch.students.map((student, index) => (
                           <StudentCard key={student.id} student={student} index={index} />
                         ))}
                       </div>
