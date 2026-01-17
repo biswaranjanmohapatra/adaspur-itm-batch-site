@@ -1,8 +1,7 @@
 import Navbar from '@/components/Navbar';
 import HeroSection from '@/components/HeroSection';
 import TeachersSection from '@/components/TeachersSection';
-import StudentsSection from '@/components/StudentsSection';
-import MemoriesSection from '@/components/MemoriesSection';
+import BatchSection from '@/components/BatchSection';
 import Footer from '@/components/Footer';
 
 const Index = () => {
@@ -11,8 +10,7 @@ const Index = () => {
       <Navbar />
       <HeroSection />
       <TeachersSection />
-      <StudentsSection />
-      <MemoriesSection />
+      <BatchSection />
       <Footer />
     </div>
   );
