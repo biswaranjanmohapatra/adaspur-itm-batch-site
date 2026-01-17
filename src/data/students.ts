@@ -88,26 +88,26 @@ const batch2021_2024: Student[] = [
 ];
 
 // Helper function to generate placeholder students for a batch
-const generatePlaceholderStudents = (batchPrefix: string, yearSuffix: string, count: number = 30): Student[] => {
+const generatePlaceholderStudents = (yearPrefix: string, count: number = 30): Student[] => {
   return Array.from({ length: count }, (_, i) => ({
     id: i + 1,
     name: "",
-    rollNo: `${batchPrefix}${yearSuffix}${String(i + 1).padStart(3, '0')}`,
+    rollNo: `ITM${yearPrefix}${String(i + 1).padStart(3, '0')}`,
     bio: ""
   }));
 };
 
-// 2022-2025 Batch Students (placeholder) - starts from 2022
-const batch2022_2025: Student[] = generatePlaceholderStudents("UNITM22", "22");
+// 2022-2025 Batch Students (placeholder)
+const batch2022_2025: Student[] = generatePlaceholderStudents("22");
 
-// 2023-2026 Batch Students (placeholder) - starts from 2023
-const batch2023_2026: Student[] = generatePlaceholderStudents("UNITM23", "23");
+// 2023-2026 Batch Students (placeholder)
+const batch2023_2026: Student[] = generatePlaceholderStudents("23");
 
-// 2024-2027 Batch Students (placeholder) - starts from 2024
-const batch2024_2027: Student[] = generatePlaceholderStudents("UNITM24", "24");
+// 2024-2027 Batch Students (placeholder)
+const batch2024_2027: Student[] = generatePlaceholderStudents("24");
 
-// 2025-2028 Batch Students (placeholder) - starts from 2025
-const batch2025_2028: Student[] = generatePlaceholderStudents("UNITM25", "25");
+// 2025-2028 Batch Students (placeholder)
+const batch2025_2028: Student[] = generatePlaceholderStudents("25");
 
 // All batches
 export const batches: Batch[] = [
