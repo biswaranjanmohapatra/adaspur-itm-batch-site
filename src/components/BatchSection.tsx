@@ -186,7 +186,7 @@ export default function BatchSection() {
             {currentBatch && (currentBatch.students.length > 0 || currentMemories.length > 0) ? (
               <div className="p-6 md:p-8 space-y-12">
                 {/* Students Section */}
-                <div className="bg-gradient-to-br from-cream to-white rounded-2xl border border-secondary/10 p-6">
+                <div id="students" className="bg-gradient-to-br from-cream to-white rounded-2xl border border-secondary/10 p-6 scroll-mt-24">
                   <div className="flex items-center gap-2 mb-6">
                     <Users className="w-5 h-5 text-primary" />
                     <h4 className="text-xl font-serif font-bold text-foreground">Students</h4>
@@ -286,7 +286,7 @@ export default function BatchSection() {
                 </div>
 
                 {/* Memories Section */}
-                <div className="bg-gradient-to-br from-cream to-white rounded-2xl border border-secondary/10 p-6">
+                <div id="memories" className="bg-gradient-to-br from-cream to-white rounded-2xl border border-secondary/10 p-6 scroll-mt-24">
                   <div className="flex items-center gap-2 mb-6">
                     <Camera className="w-5 h-5 text-primary" />
                     <h4 className="text-xl font-serif font-bold text-foreground">Memories</h4>
