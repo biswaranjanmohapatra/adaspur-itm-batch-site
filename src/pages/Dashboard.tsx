@@ -204,24 +204,12 @@ export default function Dashboard() {
           </Card>
         </motion.div>
 
-        {/* Batch Memories */}
+        {/* Batch Mates */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
           className="mb-8"
-        >
-          <BatchMemoriesGallery 
-            batchId={studentInfo?.batch_id || ''} 
-            batchYears={currentBatch?.years || ''} 
-          />
-        </motion.div>
-
-        {/* Batch Mates */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
         >
           <Card className="border-secondary/20">
             <CardHeader>
@@ -253,6 +241,18 @@ export default function Dashboard() {
               )}
             </CardContent>
           </Card>
+        </motion.div>
+
+        {/* Batch Memories */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+        >
+          <BatchMemoriesGallery 
+            batchId={studentInfo?.batch_id || ''} 
+            batchYears={currentBatch?.years || ''} 
+          />
         </motion.div>
       </main>
     </div>
