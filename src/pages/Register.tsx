@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { GraduationCap, UserPlus, AlertCircle, Eye, EyeOff, CheckCircle } from 'lucide-react';
+import { GraduationCap, UserPlus, AlertCircle, Eye, EyeOff, CheckCircle, Phone } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { validateRegistrationNumber, normalizeRegistrationNumber } from '@/lib/registrationValidation';
 import logo from '@/assets/logo.jpg';
@@ -18,6 +18,7 @@ export default function Register() {
     confirmPassword: '',
     registrationNumber: '',
     studentName: '',
+    mobileNumber: '',
   });
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -61,6 +62,14 @@ export default function Register() {
       setError('Email is required');
       return false;
     }
+    if (!formData.mobileNumber.trim()) {
+      setError('Mobile number is required');
+      return false;
+    }
+    if (!/^[6-9]\d{9}$/.test(formData.mobileNumber.trim())) {
+      setError('Please enter a valid 10-digit mobile number');
+      return false;
+    }
     if (formData.password.length < 6) {
       setError('Password must be at least 6 characters');
       return false;
@@ -89,7 +98,8 @@ export default function Register() {
         formData.password,
         normalizedRegNumber,
         formData.studentName,
-        batchId
+        batchId,
+        formData.mobileNumber.trim()
       );
 
       if (error) {
@@ -227,6 +237,31 @@ export default function Register() {
                   required
                   className="border-secondary/30 focus:border-primary"
                 />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="mobileNumber">Mobile Number *</Label>
+                <div className="relative">
+                  <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <Input
+                    id="mobileNumber"
+                    type="tel"
+                    placeholder="10-digit mobile number"
+                    value={formData.mobileNumber}
+                    onChange={(e) => handleChange('mobileNumber', e.target.value.replace(/\D/g, '').slice(0, 10))}
+                    required
+                    maxLength={10}
+                    className="border-secondary/30 focus:border-primary pl-10"
+                  />
+                  {formData.mobileNumber.length === 10 && /^[6-9]\d{9}$/.test(formData.mobileNumber) && (
+                    <CheckCircle className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-green-500" />
+                  )}
+                </div>
+                {formData.mobileNumber && formData.mobileNumber.length < 10 && (
+                  <p className="text-xs text-muted-foreground">
+                    {10 - formData.mobileNumber.length} more digits needed
+                  </p>
+                )}
               </div>
 
               <div className="space-y-2">
