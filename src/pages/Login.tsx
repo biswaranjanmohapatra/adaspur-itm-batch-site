@@ -9,11 +9,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { GraduationCap, LogIn, AlertCircle, Eye, EyeOff } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import { normalizeRegistrationNumber, validateRegistrationNumber } from '@/lib/registrationValidation';
 import logo from '@/assets/logo.jpg';
 
 export default function Login() {
-  const [registrationNumber, setRegistrationNumber] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -28,39 +27,16 @@ export default function Login() {
     setIsLoading(true);
 
     try {
-      const normalizedRegNumber = normalizeRegistrationNumber(registrationNumber);
-      
-      // Validate registration number format
-      const validation = validateRegistrationNumber(normalizedRegNumber);
-      if (!validation.valid) {
-        setError('Invalid registration number');
-        setIsLoading(false);
-        return;
-      }
-
-      // Look up email by registration number
-      const { data: studentData, error: lookupError } = await supabase
-        .from('registered_students')
-        .select('email')
-        .eq('registration_number', normalizedRegNumber)
-        .maybeSingle();
-
-      if (lookupError || !studentData || !studentData.email) {
-        setError('Invalid registration number');
-        setIsLoading(false);
-        return;
-      }
-
-      // Sign in with the found email
-      const { error: signInError } = await signIn(studentData.email, password);
+      // Sign in with email
+      const { error: signInError } = await signIn(email, password);
       
       if (signInError) {
-        setError('Invalid registration number');
+        setError('Invalid email or password');
       } else {
         navigate('/dashboard');
       }
     } catch (err) {
-      setError('Invalid registration number');
+      setError('Invalid email or password');
     } finally {
       setIsLoading(false);
     }
@@ -97,7 +73,7 @@ export default function Login() {
             <div>
               <CardTitle className="text-2xl font-serif text-primary">Welcome Back</CardTitle>
               <CardDescription className="text-muted-foreground">
-                Sign in with your registration number
+                Sign in with your email
               </CardDescription>
             </div>
           </CardHeader>
@@ -116,19 +92,16 @@ export default function Login() {
               )}
 
               <div className="space-y-2">
-                <Label htmlFor="registrationNumber">Registration Number</Label>
+                <Label htmlFor="email">Email Address</Label>
                 <Input
-                  id="registrationNumber"
-                  type="text"
-                  placeholder="e.g., UNITM210001"
-                  value={registrationNumber}
-                  onChange={(e) => setRegistrationNumber(e.target.value.toUpperCase())}
+                  id="email"
+                  type="email"
+                  placeholder="your.email@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="border-secondary/30 focus:border-primary uppercase"
+                  className="border-secondary/30 focus:border-primary"
                 />
-                <p className="text-xs text-muted-foreground">
-                  Format: UNITM21XXXX (e.g., UNITM210001 for Batch 2021-2024)
-                </p>
               </div>
 
               <div className="space-y-2">
