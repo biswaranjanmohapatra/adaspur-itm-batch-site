@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Sparkles } from 'lucide-react';
+import { Menu, X, Sparkles, LogIn } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import logoImage from '@/assets/logo.jpg';
 
 const navLinks = [
@@ -135,6 +137,23 @@ export default function Navbar() {
                 />
               </motion.a>
             ))}
+            
+            {/* Login Button */}
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5, duration: 0.4 }}
+            >
+              <Link to="/login">
+                <Button
+                  size="sm"
+                  className="ml-2 gap-2 bg-gradient-to-r from-primary to-secondary hover:opacity-90 transition-opacity"
+                >
+                  <LogIn className="w-4 h-4" />
+                  Login
+                </Button>
+              </Link>
+            </motion.div>
           </div>
 
           {/* Mobile Menu Button */}
@@ -212,6 +231,22 @@ export default function Navbar() {
                   {link.name}
                 </motion.a>
               ))}
+              
+              {/* Mobile Login Button */}
+              <motion.div
+                initial={{ opacity: 0, x: -30 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -30 }}
+                transition={{ delay: navLinks.length * 0.08, duration: 0.3 }}
+                className="mt-4 pt-4 border-t border-secondary/20"
+              >
+                <Link to="/login" onClick={() => setIsMobileMenuOpen(false)}>
+                  <Button className="w-full gap-2 bg-gradient-to-r from-primary to-secondary hover:opacity-90 transition-opacity">
+                    <LogIn className="w-4 h-4" />
+                    Login to Batch Portal
+                  </Button>
+                </Link>
+              </motion.div>
             </div>
           </motion.div>
         )}
