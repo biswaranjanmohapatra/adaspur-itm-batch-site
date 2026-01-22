@@ -1,18 +1,22 @@
+import MainNavbar from '@/components/MainNavbar';
 import HeroSection from '@/components/HeroSection';
 import TeachersSection from '@/components/TeachersSection';
-import BiswaCard from '@/components/BiswaCard';
+import BiswaCardSmall from '@/components/BiswaCardSmall';
 import BatchBoxes from '@/components/BatchBoxes';
 import Footer from '@/components/Footer';
 
 const Index = () => {
-  // Main page: No navbar, show Biswa Card + Batch boxes only
   return (
     <div className="min-h-screen">
-      <HeroSection />
-      <TeachersSection />
-      <BiswaCard />
-      <BatchBoxes />
-      <Footer />
+      <MainNavbar />
+      {/* Add top padding for fixed navbar */}
+      <div className="pt-14 md:pt-16">
+        <HeroSection />
+        <TeachersSection />
+        <BiswaCardSmall />
+        <BatchBoxes />
+        <Footer />
+      </div>
     </div>
   );
 };
