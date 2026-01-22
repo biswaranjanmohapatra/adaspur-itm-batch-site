@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Trophy, Star, GraduationCap, Award, Medal, Target, X } from 'lucide-react';
+import { Trophy, Star, GraduationCap, Award, Medal, Target, X, Code } from 'lucide-react';
 import biswaImage from '@/assets/students/biswa.jpg';
 
 const achievements = [
@@ -12,6 +12,7 @@ const achievements = [
 
 export default function BiswaCardSmall() {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [showPhoto, setShowPhoto] = useState(false);
 
   return (
     <>
@@ -54,8 +55,16 @@ export default function BiswaCardSmall() {
                 <div className="p-4 flex flex-col flex-1">
                   {/* Header with Photo & Name */}
                   <div className="flex items-center gap-3 mb-3">
-                    {/* Photo */}
-                    <div className="relative flex-shrink-0">
+                    {/* Photo - Clickable */}
+                    <motion.div 
+                      className="relative flex-shrink-0 cursor-pointer"
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setShowPhoto(true);
+                      }}
+                    >
                       <div className="w-14 h-14 rounded-full p-0.5 bg-gradient-to-br from-amber-400 to-amber-600">
                         <div className="w-full h-full rounded-full overflow-hidden border-2 border-white">
                           <img
@@ -68,7 +77,7 @@ export default function BiswaCardSmall() {
                       <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center border border-white">
                         <Trophy className="w-2.5 h-2.5 text-white" />
                       </div>
-                    </div>
+                    </motion.div>
 
                     {/* Name */}
                     <div className="min-w-0">
@@ -82,6 +91,12 @@ export default function BiswaCardSmall() {
                       <p className="text-[10px] text-muted-foreground">
                         Batch 2021-2024
                       </p>
+                      <div className="flex items-center gap-1 mt-0.5">
+                        <Code className="w-2.5 h-2.5 text-amber-600" />
+                        <p className="text-[9px] text-amber-700 font-medium">
+                          Creator of this Website
+                        </p>
+                      </div>
                     </div>
                   </div>
 
@@ -122,6 +137,61 @@ export default function BiswaCardSmall() {
           </motion.div>
         </div>
       </section>
+
+      {/* Photo Modal */}
+      <AnimatePresence>
+        {showPhoto && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-primary/90 backdrop-blur-md flex items-center justify-center p-4"
+            onClick={() => setShowPhoto(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.5, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.5, opacity: 0 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+              className="relative"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Close button */}
+              <button
+                onClick={() => setShowPhoto(false)}
+                className="absolute -top-10 right-0 text-white/80 hover:text-white flex items-center gap-1 text-sm"
+              >
+                Close <X className="w-4 h-4" />
+              </button>
+
+              {/* Photo Frame */}
+              <div className="relative">
+                <div className="absolute -inset-2 bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 rounded-3xl blur-md opacity-75" />
+                <div className="relative w-72 h-72 sm:w-80 sm:h-80 rounded-2xl p-1.5 bg-gradient-to-br from-amber-400 via-amber-500 to-amber-600">
+                  <div className="w-full h-full rounded-xl overflow-hidden border-4 border-white shadow-2xl">
+                    <img
+                      src={biswaImage}
+                      alt="Biswa Ranjan Mohapatra"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Name below photo */}
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="text-center mt-4"
+              >
+                <h3 className="text-white text-xl font-serif font-bold">Biswa Ranjan Mohapatra</h3>
+                <p className="text-white/70 text-sm">B.Sc ITM • 2021-2024</p>
+              </motion.div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Expanded Modal */}
       <AnimatePresence>
