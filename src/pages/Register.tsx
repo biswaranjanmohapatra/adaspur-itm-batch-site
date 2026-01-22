@@ -6,9 +6,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { GraduationCap, UserPlus, AlertCircle, Eye, EyeOff, CheckCircle, Info } from 'lucide-react';
+import { GraduationCap, UserPlus, AlertCircle, Eye, EyeOff, CheckCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { validateRegistrationNumber, normalizeRegistrationNumber, BATCH_CONFIG } from '@/lib/registrationValidation';
+import { validateRegistrationNumber, normalizeRegistrationNumber } from '@/lib/registrationValidation';
 import logo from '@/assets/logo.jpg';
 
 export default function Register() {
@@ -164,6 +164,19 @@ export default function Register() {
               )}
 
               <div className="space-y-2">
+                <Label htmlFor="studentName">Full Name *</Label>
+                <Input
+                  id="studentName"
+                  type="text"
+                  placeholder="Enter your full name"
+                  value={formData.studentName}
+                  onChange={(e) => handleChange('studentName', e.target.value)}
+                  required
+                  className="border-secondary/30 focus:border-primary"
+                />
+              </div>
+
+              <div className="space-y-2">
                 <Label htmlFor="registrationNumber">Registration Number *</Label>
                 <Input
                   id="registrationNumber"
@@ -201,37 +214,6 @@ export default function Register() {
                     )}
                   </motion.div>
                 )}
-                
-                {/* Batch format help */}
-                <div className="bg-muted/50 rounded-lg p-3 mt-2">
-                  <div className="flex items-start gap-2 text-xs text-muted-foreground">
-                    <Info className="w-3 h-3 mt-0.5 flex-shrink-0" />
-                    <div>
-                      <p className="font-medium mb-1">Valid Registration Number Formats:</p>
-                      <ul className="space-y-0.5">
-                        {BATCH_CONFIG.map(batch => (
-                          <li key={batch.batchId}>
-                            <span className="font-mono">{batch.prefix}0001-{batch.prefix}0030</span>
-                            <span className="ml-1">→ {batch.batchName}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="studentName">Full Name *</Label>
-                <Input
-                  id="studentName"
-                  type="text"
-                  placeholder="Enter your full name"
-                  value={formData.studentName}
-                  onChange={(e) => handleChange('studentName', e.target.value)}
-                  required
-                  className="border-secondary/30 focus:border-primary"
-                />
               </div>
 
               <div className="space-y-2">
@@ -245,9 +227,6 @@ export default function Register() {
                   required
                   className="border-secondary/30 focus:border-primary"
                 />
-                <p className="text-xs text-muted-foreground">
-                  This email is for account recovery. You'll login with your registration number.
-                </p>
               </div>
 
               <div className="space-y-2">
