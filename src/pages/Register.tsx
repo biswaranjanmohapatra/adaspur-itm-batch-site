@@ -1,15 +1,14 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { GraduationCap, UserPlus, AlertCircle, Eye, EyeOff, CheckCircle } from 'lucide-react';
+import { GraduationCap, UserPlus, AlertCircle, Eye, EyeOff, CheckCircle, Info } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { batches } from '@/data/students';
+import { validateRegistrationNumber, normalizeRegistrationNumber, BATCH_CONFIG } from '@/lib/registrationValidation';
 import logo from '@/assets/logo.jpg';
 
 export default function Register() {
@@ -19,7 +18,6 @@ export default function Register() {
     confirmPassword: '',
     registrationNumber: '',
     studentName: '',
-    batchId: '',
   });
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -28,22 +26,35 @@ export default function Register() {
   const navigate = useNavigate();
   const { toast } = useToast();
 
+  // Auto-detect batch from registration number
+  const detectedBatch = useMemo(() => {
+    if (!formData.registrationNumber) return null;
+    const normalized = normalizeRegistrationNumber(formData.registrationNumber);
+    const validation = validateRegistrationNumber(normalized);
+    return validation.valid ? validation.batch : null;
+  }, [formData.registrationNumber]);
+
+  const registrationValidation = useMemo(() => {
+    if (!formData.registrationNumber) return null;
+    const normalized = normalizeRegistrationNumber(formData.registrationNumber);
+    return validateRegistrationNumber(normalized);
+  }, [formData.registrationNumber]);
+
   const handleChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     setError('');
   };
 
   const validateForm = () => {
-    if (!formData.registrationNumber.trim()) {
-      setError('Registration number is required');
+    const normalized = normalizeRegistrationNumber(formData.registrationNumber);
+    const validation = validateRegistrationNumber(normalized);
+    
+    if (!validation.valid) {
+      setError(validation.error || 'Invalid registration number');
       return false;
     }
     if (!formData.studentName.trim()) {
       setError('Student name is required');
-      return false;
-    }
-    if (!formData.batchId) {
-      setError('Please select your batch');
       return false;
     }
     if (!formData.email.trim()) {
@@ -70,12 +81,15 @@ export default function Register() {
     setError('');
 
     try {
+      const normalizedRegNumber = normalizeRegistrationNumber(formData.registrationNumber);
+      const batchId = detectedBatch?.batchId || '';
+
       const { error } = await signUp(
         formData.email,
         formData.password,
-        formData.registrationNumber,
+        normalizedRegNumber,
         formData.studentName,
-        formData.batchId
+        batchId
       );
 
       if (error) {
@@ -154,12 +168,57 @@ export default function Register() {
                 <Input
                   id="registrationNumber"
                   type="text"
-                  placeholder="e.g., ITM2021001"
+                  placeholder="e.g., UNITM210001"
                   value={formData.registrationNumber}
-                  onChange={(e) => handleChange('registrationNumber', e.target.value)}
+                  onChange={(e) => handleChange('registrationNumber', e.target.value.toUpperCase())}
                   required
-                  className="border-secondary/30 focus:border-primary"
+                  className={`border-secondary/30 focus:border-primary uppercase ${
+                    registrationValidation?.valid 
+                      ? 'border-green-500 focus:border-green-500' 
+                      : formData.registrationNumber && !registrationValidation?.valid 
+                        ? 'border-destructive focus:border-destructive' 
+                        : ''
+                  }`}
                 />
+                {formData.registrationNumber && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    className={`flex items-center gap-2 text-xs ${
+                      registrationValidation?.valid ? 'text-green-600' : 'text-destructive'
+                    }`}
+                  >
+                    {registrationValidation?.valid ? (
+                      <>
+                        <CheckCircle className="w-3 h-3" />
+                        <span>Valid! Auto-assigned to {detectedBatch?.batchName}</span>
+                      </>
+                    ) : (
+                      <>
+                        <AlertCircle className="w-3 h-3" />
+                        <span>{registrationValidation?.error}</span>
+                      </>
+                    )}
+                  </motion.div>
+                )}
+                
+                {/* Batch format help */}
+                <div className="bg-muted/50 rounded-lg p-3 mt-2">
+                  <div className="flex items-start gap-2 text-xs text-muted-foreground">
+                    <Info className="w-3 h-3 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <p className="font-medium mb-1">Valid Registration Number Formats:</p>
+                      <ul className="space-y-0.5">
+                        {BATCH_CONFIG.map(batch => (
+                          <li key={batch.batchId}>
+                            <span className="font-mono">{batch.prefix}0001-{batch.prefix}0030</span>
+                            <span className="ml-1">→ {batch.batchName}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               <div className="space-y-2">
@@ -176,25 +235,6 @@ export default function Register() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="batchId">Select Your Batch *</Label>
-                <Select
-                  value={formData.batchId}
-                  onValueChange={(value) => handleChange('batchId', value)}
-                >
-                  <SelectTrigger className="border-secondary/30 focus:border-primary">
-                    <SelectValue placeholder="Choose your batch" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {batches.map((batch) => (
-                      <SelectItem key={batch.id} value={batch.id}>
-                        {batch.years} - {batch.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
                 <Label htmlFor="email">Email Address *</Label>
                 <Input
                   id="email"
@@ -205,6 +245,9 @@ export default function Register() {
                   required
                   className="border-secondary/30 focus:border-primary"
                 />
+                <p className="text-xs text-muted-foreground">
+                  This email is for account recovery. You'll login with your registration number.
+                </p>
               </div>
 
               <div className="space-y-2">
@@ -250,7 +293,7 @@ export default function Register() {
               <Button
                 type="submit"
                 className="w-full bg-gradient-to-r from-primary to-secondary hover:opacity-90 transition-opacity"
-                disabled={isLoading}
+                disabled={isLoading || !registrationValidation?.valid}
               >
                 {isLoading ? (
                   <span className="flex items-center gap-2">
