@@ -200,15 +200,6 @@ export default function Login() {
                   Register here
                 </Link>
               </div>
-
-              <div className="text-center">
-                <Link
-                  to="/"
-                  className="text-sm text-muted-foreground hover:text-primary"
-                >
-                  ← Back to Home
-                </Link>
-              </div>
             </form>
           </CardContent>
         </Card>
