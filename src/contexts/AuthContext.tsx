@@ -17,7 +17,7 @@ interface AuthContextType {
   isAdmin: boolean;
   isLoading: boolean;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
-  signUp: (email: string, password: string, registrationNumber: string, studentName: string, batchId: string) => Promise<{ error: Error | null }>;
+  signUp: (email: string, password: string, registrationNumber: string, studentName: string, batchId: string, mobileNumber: string) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
 }
 
@@ -106,7 +106,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     password: string,
     registrationNumber: string,
     studentName: string,
-    batchId: string
+    batchId: string,
+    mobileNumber: string
   ) => {
     const { data, error } = await supabase.auth.signUp({
       email,
@@ -127,7 +128,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           registration_number: registrationNumber,
           student_name: studentName,
           batch_id: batchId,
-          email: email, // Store email for login lookup
+          email: email,
+          mobile_number: mobileNumber,
         });
 
       if (insertError) {
