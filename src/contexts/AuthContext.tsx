@@ -7,6 +7,7 @@ interface StudentInfo {
   registration_number: string;
   student_name: string;
   batch_id: string;
+  email?: string;
 }
 
 interface AuthContextType {
@@ -126,6 +127,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           registration_number: registrationNumber,
           student_name: studentName,
           batch_id: batchId,
+          email: email, // Store email for login lookup
         });
 
       if (insertError) {

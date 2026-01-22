@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion';
-import { useAuth } from '@/contexts/AuthContext';
 import { 
   Trophy, 
   Star, 
@@ -18,14 +17,9 @@ const achievements = [
   { icon: Medal, text: "Got seat in NIT Patna, HCU, and BHU" },
 ];
 
+// BiswaCard is now visible to everyone (public view)
+// No authentication required to see this card
 export default function BiswaCard() {
-  const { user, studentInfo, isLoading } = useAuth();
-
-  // Only show to logged-in users from 2021-2024 batch
-  if (isLoading) return null;
-  if (!user || !studentInfo) return null;
-  if (studentInfo.batch_id !== '2021-2024') return null;
-
   return (
     <section className="py-16 md:py-20 bg-gradient-to-b from-cream via-cream-dark to-cream relative overflow-hidden">
       {/* Premium background effects */}
