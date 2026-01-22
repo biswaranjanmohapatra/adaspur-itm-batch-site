@@ -33,7 +33,7 @@ export default function Login() {
       // Validate registration number format
       const validation = validateRegistrationNumber(normalizedRegNumber);
       if (!validation.valid) {
-        setError(validation.error || 'Invalid registration number');
+        setError('Invalid registration number');
         setIsLoading(false);
         return;
       }
@@ -45,14 +45,8 @@ export default function Login() {
         .eq('registration_number', normalizedRegNumber)
         .maybeSingle();
 
-      if (lookupError) {
-        setError('Error looking up registration. Please try again.');
-        setIsLoading(false);
-        return;
-      }
-
-      if (!studentData || !studentData.email) {
-        setError('Registration number not found. Please register first.');
+      if (lookupError || !studentData || !studentData.email) {
+        setError('Invalid registration number');
         setIsLoading(false);
         return;
       }
@@ -61,21 +55,12 @@ export default function Login() {
       const { error: signInError } = await signIn(studentData.email, password);
       
       if (signInError) {
-        setError('Invalid password. Please try again.');
-        toast({
-          variant: 'destructive',
-          title: 'Login Failed',
-          description: 'Invalid credentials. Please check your password.',
-        });
+        setError('Invalid registration number');
       } else {
-        toast({
-          title: 'Welcome back!',
-          description: 'You have successfully logged in.',
-        });
         navigate('/dashboard');
       }
     } catch (err) {
-      setError('An unexpected error occurred. Please try again.');
+      setError('Invalid registration number');
     } finally {
       setIsLoading(false);
     }
