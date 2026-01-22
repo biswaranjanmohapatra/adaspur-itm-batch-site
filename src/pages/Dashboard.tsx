@@ -3,21 +3,18 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { batches } from '@/data/students';
 import StudentCard from '@/components/StudentCard';
+import DashboardNavbar from '@/components/DashboardNavbar';
+import BatchMemoriesGallery from '@/components/BatchMemoriesGallery';
 import { 
-  LogOut, 
   Users, 
   MessageSquare, 
   Calendar, 
   GraduationCap,
-  Bell,
-  User,
-  Shield
+  Bell
 } from 'lucide-react';
-import logo from '@/assets/logo.jpg';
 
 interface BatchMessage {
   id: string;
@@ -27,7 +24,7 @@ interface BatchMessage {
 }
 
 export default function Dashboard() {
-  const { user, studentInfo, isAdmin, isLoading, signOut } = useAuth();
+  const { user, studentInfo, isAdmin, isLoading } = useAuth();
   const navigate = useNavigate();
   const [batchMessages, setBatchMessages] = useState<BatchMessage[]>([]);
   const [loadingMessages, setLoadingMessages] = useState(true);
@@ -57,11 +54,6 @@ export default function Dashboard() {
     setLoadingMessages(false);
   };
 
-  const handleLogout = async () => {
-    await signOut();
-    navigate('/login');
-  };
-
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-cream via-cream-dark to-cream flex items-center justify-center">
@@ -83,53 +75,8 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-cream via-cream-dark to-cream">
-      {/* Header */}
-      <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-secondary/20 shadow-sm">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-secondary p-0.5">
-              <img
-                src={logo}
-                alt="ITM Logo"
-                className="w-full h-full rounded-full object-cover"
-              />
-            </div>
-            <div>
-              <h1 className="font-serif font-bold text-primary">ITM Batch Portal</h1>
-              <p className="text-xs text-muted-foreground">
-                {studentInfo ? `${studentInfo.batch_id.replace('-', ' - ')}` : 'Welcome'}
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-4">
-            {isAdmin && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => navigate('/admin')}
-                className="gap-2 border-primary/30 text-primary hover:bg-primary/10"
-              >
-                <Shield className="w-4 h-4" />
-                Admin Panel
-              </Button>
-            )}
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <User className="w-4 h-4" />
-              <span className="hidden sm:inline">{studentInfo?.student_name || user.email}</span>
-            </div>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleLogout}
-              className="gap-2 border-destructive/30 text-destructive hover:bg-destructive/10"
-            >
-              <LogOut className="w-4 h-4" />
-              Logout
-            </Button>
-          </div>
-        </div>
-      </header>
+      {/* Navbar - Only shown on dashboard */}
+      <DashboardNavbar />
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
@@ -192,8 +139,8 @@ export default function Dashboard() {
 
           <Card className="border-secondary/20">
             <CardContent className="p-6 flex items-center gap-4">
-              <div className="w-12 h-12 rounded-full bg-amber-500/10 flex items-center justify-center">
-                <GraduationCap className="w-6 h-6 text-amber-600" />
+              <div className="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center">
+                <GraduationCap className="w-6 h-6 text-accent" />
               </div>
               <div>
                 <p className="text-2xl font-bold text-foreground">{currentBatch?.name || 'ITM'}</p>
@@ -257,11 +204,24 @@ export default function Dashboard() {
           </Card>
         </motion.div>
 
-        {/* Batch Mates */}
+        {/* Batch Memories */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
+          className="mb-8"
+        >
+          <BatchMemoriesGallery 
+            batchId={studentInfo?.batch_id || ''} 
+            batchYears={currentBatch?.years || ''} 
+          />
+        </motion.div>
+
+        {/* Batch Mates */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
         >
           <Card className="border-secondary/20">
             <CardHeader>
