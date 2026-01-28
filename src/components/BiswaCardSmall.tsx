@@ -95,10 +95,15 @@ export default function BiswaCardSmall() {
                   </div>
 
                   {/* Creator Badge - Above Achievements */}
-                  <div className="flex items-center justify-center gap-1.5 mb-2 py-1.5 px-3 bg-gradient-to-r from-amber-100 to-amber-50 rounded-lg border border-amber-200">
-                    <Code className="w-3 h-3 text-amber-600" />
-                    <p className="text-[10px] text-amber-700 font-semibold">
-                      Creator of this Website
+                  <div className="flex flex-col items-center justify-center gap-0.5 mb-2 py-1.5 px-3 bg-gradient-to-r from-amber-100 to-amber-50 rounded-lg border border-amber-200">
+                    <div className="flex items-center gap-1.5">
+                      <Code className="w-3 h-3 text-amber-600" />
+                      <p className="text-[10px] text-amber-700 font-semibold">
+                        Creator of this Website
+                      </p>
+                    </div>
+                    <p className="text-[8px] text-amber-600/80">
+                      Designed & Developed with ❤️
                     </p>
                   </div>
 
@@ -147,7 +152,7 @@ export default function BiswaCardSmall() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-primary/90 backdrop-blur-md flex items-center justify-center p-4"
+            className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-md flex items-center justify-center p-4"
             onClick={() => setShowPhoto(false)}
           >
             <motion.div
