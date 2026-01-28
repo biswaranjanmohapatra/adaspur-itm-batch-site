@@ -97,118 +97,162 @@ export default function Login() {
           {/* Lamp section */}
           <div className="pt-8 pb-4 bg-gradient-to-b from-[#0d0d15] to-[#12121c]">
             <CuteLamp isOn={lampOn} />
-          </div>
-
-          {/* Form section */}
-          <div className="p-6 pt-4">
-            <form onSubmit={handleSubmit} className="space-y-4">
-              {error && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  className="flex items-center gap-2 p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400 text-sm"
-                >
-                  <AlertCircle className="w-4 h-4 flex-shrink-0" />
-                  <span>{error}</span>
-                </motion.div>
-              )}
-
-              {/* Email input */}
-              <div className="space-y-2">
-                <Label htmlFor="email" className="text-gray-400 text-sm">
-                  Email Address
-                </Label>
-                <div className="relative">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="your.email@example.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    className="pl-10 bg-[#1a1a28] border-gray-700/50 text-gray-200 placeholder:text-gray-600 focus:border-amber-500/50 focus:ring-amber-500/20"
-                  />
-                </div>
-              </div>
-
-              {/* Password input */}
-              <div className="space-y-2">
-                <Label htmlFor="password" className="text-gray-400 text-sm">
-                  Password
-                </Label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
-                  <Input
-                    id="password"
-                    type={showPassword ? 'text' : 'password'}
-                    placeholder="••••••••"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    className="pl-10 pr-10 bg-[#1a1a28] border-gray-700/50 text-gray-200 placeholder:text-gray-600 focus:border-amber-500/50 focus:ring-amber-500/20"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300 transition-colors"
-                  >
-                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                  </button>
-                </div>
-              </div>
-
-              {/* Forgot password link */}
-              <div className="text-right">
-                <Link
-                  to="/register"
-                  className="text-xs text-gray-500 hover:text-amber-500 transition-colors"
-                >
-                  Forgot Password?
-                </Link>
-              </div>
-
-              {/* Submit button */}
-              <motion.div
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+            
+            {/* Lamp switch */}
+            <div className="flex justify-center mt-4">
+              <button
+                type="button"
+                onClick={() => setLampOn(!lampOn)}
+                className="group relative"
               >
-                <Button
-                  type="submit"
-                  className="w-full bg-gradient-to-r from-amber-500 via-orange-500 to-amber-500 hover:from-amber-600 hover:via-orange-600 hover:to-amber-600 text-white font-semibold py-5 shadow-lg shadow-amber-500/20 transition-all duration-300"
-                  disabled={isLoading}
+                <motion.div
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                  className={`w-14 h-7 rounded-full p-1 transition-colors duration-300 ${
+                    lampOn 
+                      ? 'bg-gradient-to-r from-amber-500 to-orange-500 shadow-lg shadow-amber-500/30' 
+                      : 'bg-gray-700'
+                  }`}
                 >
-                  {isLoading ? (
-                    <span className="flex items-center gap-2">
-                      <motion.div
-                        animate={{ rotate: 360 }}
-                        transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-                      >
-                        <GraduationCap className="w-4 h-4" />
-                      </motion.div>
-                      Signing in...
-                    </span>
-                  ) : (
-                    <span className="flex items-center gap-2">
-                      <LogIn className="w-4 h-4" />
-                      Sign In
-                    </span>
-                  )}
-                </Button>
-              </motion.div>
-
-              {/* Register link */}
-              <div className="text-center text-sm text-gray-500 mt-4">
-                Don't have an account?{' '}
-                <Link
-                  to="/register"
-                  className="text-amber-500 hover:text-amber-400 font-medium transition-colors"
-                >
-                  Register here
-                </Link>
-              </div>
-            </form>
+                  <motion.div
+                    animate={{ x: lampOn ? 26 : 0 }}
+                    transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                    className={`w-5 h-5 rounded-full shadow-md ${
+                      lampOn 
+                        ? 'bg-white' 
+                        : 'bg-gray-400'
+                    }`}
+                  />
+                </motion.div>
+                <span className="absolute -bottom-5 left-1/2 -translate-x-1/2 text-[10px] text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                  {lampOn ? 'Turn Off' : 'Turn On'}
+                </span>
+              </button>
+            </div>
           </div>
+
+          {/* Form section - appears/disappears with lamp */}
+          <AnimatePresence>
+            {lampOn && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.4, ease: 'easeInOut' }}
+                className="overflow-hidden"
+              >
+                <div className="p-6 pt-4">
+                  <form onSubmit={handleSubmit} className="space-y-4">
+                    {error && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        className="flex items-center gap-2 p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400 text-sm"
+                      >
+                        <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                        <span>{error}</span>
+                      </motion.div>
+                    )}
+
+                    {/* Email input */}
+                    <div className="space-y-2">
+                      <Label htmlFor="email" className="text-gray-400 text-sm">
+                        Email Address
+                      </Label>
+                      <div className="relative">
+                        <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                        <Input
+                          id="email"
+                          type="email"
+                          placeholder="your.email@example.com"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          required
+                          className="pl-10 bg-[#1a1a28] border-gray-700/50 text-gray-200 placeholder:text-gray-600 focus:border-amber-500/50 focus:ring-amber-500/20"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Password input */}
+                    <div className="space-y-2">
+                      <Label htmlFor="password" className="text-gray-400 text-sm">
+                        Password
+                      </Label>
+                      <div className="relative">
+                        <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                        <Input
+                          id="password"
+                          type={showPassword ? 'text' : 'password'}
+                          placeholder="••••••••"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          required
+                          className="pl-10 pr-10 bg-[#1a1a28] border-gray-700/50 text-gray-200 placeholder:text-gray-600 focus:border-amber-500/50 focus:ring-amber-500/20"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword(!showPassword)}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300 transition-colors"
+                        >
+                          {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Forgot password link */}
+                    <div className="text-right">
+                      <Link
+                        to="/register"
+                        className="text-xs text-gray-500 hover:text-amber-500 transition-colors"
+                      >
+                        Forgot Password?
+                      </Link>
+                    </div>
+
+                    {/* Submit button */}
+                    <motion.div
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      <Button
+                        type="submit"
+                        className="w-full bg-gradient-to-r from-amber-500 via-orange-500 to-amber-500 hover:from-amber-600 hover:via-orange-600 hover:to-amber-600 text-white font-semibold py-5 shadow-lg shadow-amber-500/20 transition-all duration-300"
+                        disabled={isLoading}
+                      >
+                        {isLoading ? (
+                          <span className="flex items-center gap-2">
+                            <motion.div
+                              animate={{ rotate: 360 }}
+                              transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                            >
+                              <GraduationCap className="w-4 h-4" />
+                            </motion.div>
+                            Signing in...
+                          </span>
+                        ) : (
+                          <span className="flex items-center gap-2">
+                            <LogIn className="w-4 h-4" />
+                            Sign In
+                          </span>
+                        )}
+                      </Button>
+                    </motion.div>
+
+                    {/* Register link */}
+                    <div className="text-center text-sm text-gray-500 mt-4">
+                      Don't have an account?{' '}
+                      <Link
+                        to="/register"
+                        className="text-amber-500 hover:text-amber-400 font-medium transition-colors"
+                      >
+                        Register here
+                      </Link>
+                    </div>
+                  </form>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </motion.div>
 
