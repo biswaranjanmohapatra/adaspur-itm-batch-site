@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -10,6 +10,7 @@ import { useToast } from '@/hooks/use-toast';
 import CuteLamp from '@/components/CuteLamp';
 
 export default function Login() {
+  const [lampOn, setLampOn] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -29,12 +30,16 @@ export default function Login() {
       
       if (signInError) {
         setError('Invalid email or password');
+        setIsLoading(false);
       } else {
-        navigate('/dashboard');
+        // Turn off lamp before navigating
+        setLampOn(false);
+        setTimeout(() => {
+          navigate('/dashboard');
+        }, 600);
       }
     } catch (err) {
       setError('Invalid email or password');
-    } finally {
       setIsLoading(false);
     }
   };
@@ -91,7 +96,7 @@ export default function Login() {
         <div className="relative bg-[#12121c] rounded-2xl border border-gray-700/50 overflow-hidden">
           {/* Lamp section */}
           <div className="pt-8 pb-4 bg-gradient-to-b from-[#0d0d15] to-[#12121c]">
-            <CuteLamp />
+            <CuteLamp isOn={lampOn} />
           </div>
 
           {/* Form section */}
