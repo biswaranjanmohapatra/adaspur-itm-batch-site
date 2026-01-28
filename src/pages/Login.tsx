@@ -5,11 +5,9 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { GraduationCap, LogIn, AlertCircle, Eye, EyeOff } from 'lucide-react';
+import { GraduationCap, LogIn, AlertCircle, Eye, EyeOff, User, Lock } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
-import logo from '@/assets/logo.jpg';
+import CuteLamp from '@/components/CuteLamp';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -27,7 +25,6 @@ export default function Login() {
     setIsLoading(true);
 
     try {
-      // Sign in with email
       const { error: signInError } = await signIn(email, password);
       
       if (signInError) {
@@ -43,70 +40,100 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-cream via-cream-dark to-cream flex items-center justify-center p-4">
-      {/* Background decorations */}
-      <div className="absolute top-0 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
-      <div className="absolute bottom-0 right-0 w-96 h-96 bg-secondary/5 rounded-full blur-3xl translate-x-1/2 translate-y-1/2" />
+    <div className="min-h-screen bg-[#0a0a12] flex flex-col items-center justify-center p-4 relative overflow-hidden">
+      {/* Animated background gradient */}
+      <div className="absolute inset-0 overflow-hidden">
+        <motion.div
+          animate={{
+            opacity: [0.1, 0.2, 0.1],
+            scale: [1, 1.2, 1],
+          }}
+          transition={{ duration: 8, repeat: Infinity }}
+          className="absolute top-1/4 left-1/4 w-96 h-96 bg-amber-600/10 rounded-full blur-3xl"
+        />
+        <motion.div
+          animate={{
+            opacity: [0.05, 0.15, 0.05],
+            scale: [1.2, 1, 1.2],
+          }}
+          transition={{ duration: 10, repeat: Infinity }}
+          className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl"
+        />
+      </div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
+      {/* Title */}
+      <motion.h1
+        initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="w-full max-w-md relative z-10"
+        className="text-3xl md:text-4xl font-bold mb-6 text-center"
+        style={{
+          background: 'linear-gradient(90deg, #f97316, #fbbf24, #f97316)',
+          backgroundClip: 'text',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+        }}
       >
-        <Card className="border-secondary/20 shadow-xl bg-white/90 backdrop-blur-sm">
-          <CardHeader className="text-center space-y-4">
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-              className="mx-auto"
-            >
-              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary to-secondary p-1 mx-auto">
-                <img
-                  src={logo}
-                  alt="ITM Logo"
-                  className="w-full h-full rounded-full object-cover"
-                />
-              </div>
-            </motion.div>
-            <div>
-              <CardTitle className="text-2xl font-serif text-primary">Welcome Back</CardTitle>
-              <CardDescription className="text-muted-foreground">
-                Sign in with your email
-              </CardDescription>
-            </div>
-          </CardHeader>
+        Cute Lamp Login
+      </motion.h1>
 
-          <CardContent>
+      {/* Main card with lamp */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+        className="relative w-full max-w-md"
+      >
+        {/* Card border glow */}
+        <div className="absolute -inset-0.5 bg-gradient-to-r from-gray-700 via-gray-600 to-gray-700 rounded-2xl opacity-50" />
+        
+        {/* Main card */}
+        <div className="relative bg-[#12121c] rounded-2xl border border-gray-700/50 overflow-hidden">
+          {/* Lamp section */}
+          <div className="pt-8 pb-4 bg-gradient-to-b from-[#0d0d15] to-[#12121c]">
+            <CuteLamp />
+          </div>
+
+          {/* Form section */}
+          <div className="p-6 pt-4">
             <form onSubmit={handleSubmit} className="space-y-4">
               {error && (
                 <motion.div
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
-                  className="flex items-center gap-2 p-3 bg-destructive/10 border border-destructive/20 rounded-lg text-destructive text-sm"
+                  className="flex items-center gap-2 p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400 text-sm"
                 >
                   <AlertCircle className="w-4 h-4 flex-shrink-0" />
                   <span>{error}</span>
                 </motion.div>
               )}
 
+              {/* Email input */}
               <div className="space-y-2">
-                <Label htmlFor="email">Email Address</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="your.email@example.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  className="border-secondary/30 focus:border-primary"
-                />
+                <Label htmlFor="email" className="text-gray-400 text-sm">
+                  Email Address
+                </Label>
+                <div className="relative">
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="your.email@example.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    className="pl-10 bg-[#1a1a28] border-gray-700/50 text-gray-200 placeholder:text-gray-600 focus:border-amber-500/50 focus:ring-amber-500/20"
+                  />
+                </div>
               </div>
 
+              {/* Password input */}
               <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password" className="text-gray-400 text-sm">
+                  Password
+                </Label>
                 <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
                   <Input
                     id="password"
                     type={showPassword ? 'text' : 'password'}
@@ -114,54 +141,81 @@ export default function Login() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    className="border-secondary/30 focus:border-primary pr-10"
+                    className="pl-10 pr-10 bg-[#1a1a28] border-gray-700/50 text-gray-200 placeholder:text-gray-600 focus:border-amber-500/50 focus:ring-amber-500/20"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300 transition-colors"
                   >
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 </div>
               </div>
 
-              <Button
-                type="submit"
-                className="w-full bg-gradient-to-r from-primary to-secondary hover:opacity-90 transition-opacity"
-                disabled={isLoading}
-              >
-                {isLoading ? (
-                  <span className="flex items-center gap-2">
-                    <motion.div
-                      animate={{ rotate: 360 }}
-                      transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-                    >
-                      <GraduationCap className="w-4 h-4" />
-                    </motion.div>
-                    Signing in...
-                  </span>
-                ) : (
-                  <span className="flex items-center gap-2">
-                    <LogIn className="w-4 h-4" />
-                    Sign In
-                  </span>
-                )}
-              </Button>
+              {/* Forgot password link */}
+              <div className="text-right">
+                <Link
+                  to="/register"
+                  className="text-xs text-gray-500 hover:text-amber-500 transition-colors"
+                >
+                  Forgot Password?
+                </Link>
+              </div>
 
-              <div className="text-center text-sm text-muted-foreground">
+              {/* Submit button */}
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <Button
+                  type="submit"
+                  className="w-full bg-gradient-to-r from-amber-500 via-orange-500 to-amber-500 hover:from-amber-600 hover:via-orange-600 hover:to-amber-600 text-white font-semibold py-5 shadow-lg shadow-amber-500/20 transition-all duration-300"
+                  disabled={isLoading}
+                >
+                  {isLoading ? (
+                    <span className="flex items-center gap-2">
+                      <motion.div
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                      >
+                        <GraduationCap className="w-4 h-4" />
+                      </motion.div>
+                      Signing in...
+                    </span>
+                  ) : (
+                    <span className="flex items-center gap-2">
+                      <LogIn className="w-4 h-4" />
+                      Sign In
+                    </span>
+                  )}
+                </Button>
+              </motion.div>
+
+              {/* Register link */}
+              <div className="text-center text-sm text-gray-500 mt-4">
                 Don't have an account?{' '}
                 <Link
                   to="/register"
-                  className="text-primary hover:underline font-medium"
+                  className="text-amber-500 hover:text-amber-400 font-medium transition-colors"
                 >
                   Register here
                 </Link>
               </div>
             </form>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </motion.div>
+
+      {/* Footer credit */}
+      <motion.p
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.5 }}
+        className="mt-6 text-gray-600 text-xs"
+      >
+        B.Sc ITM • Udayanath College
+      </motion.p>
     </div>
   );
 }
